@@ -8,13 +8,13 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://crossley-nilsen.com
+ * @link              https://github.com/thnilsen/wp-404-project/
  * @since             1.0.0
  * @package           wp-404-project
  *
  * @wordpress-plugin
  * Plugin Name:       WP 404 Project
- * Plugin URI:        https://crossley-nilsen.com/
+ * Plugin URI:        https://github.com/thnilsen/wp-404-project/
  * Description:       SANS ISC 404 Project as a wordpress plugin. Code based on original PHP script by SANS ISC
  * Version:           1.0.0
  * Author:            Thomas Nilsen
@@ -235,7 +235,7 @@ function wp_404_project_hook_404(){
 
         $s_submit_site = $str_protocol . '://isc.sans.edu/';
 
-        $s_submit_url='weblogs/404project.html?id='.$options['user_id'].'&version=2';        
+        $s_submit_url='weblogs/404project.html?id='.$options['user_id'].'&version=2';
 
         $s_data=$options['user_id'].chr(0).$options['api_key'].chr(0).$s_url.chr(0).$s_ip.chr(0).$s_ua.chr(0).date('Y-m-d').chr(0).date('H:i:s').chr(0).$options['ip_mask'];
         $s_data='DATA='.base64_encode($s_data);
