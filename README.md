@@ -5,7 +5,7 @@ The 404Project collects \"Page Not Found\" errors from web servers and submits d
 
 More information on the original 404Project can be found at https://isc.sans.edu/tools/404project.html
 
-== Description ==
+# Description
 The SANS ISC 404Project collects information from web requests that ends up on a 404 \"Page Not Found\". Attackers often search for vulnerable applications, and in the process generate 404 errors on sites that do not use these applications. The error logs give us an insight into what vulnerabilities attackers attempt to exploit.
 The information is collected by The Internet Storm Center (SANS ISC) at http://isc.sans.org
 The code will rate limit submissions. Any 404 requests during a rate limit period will be ignored. This is to prevent overloading / DoS conditions.
@@ -13,7 +13,7 @@ The code will rate limit submissions. Any 404 requests during a rate limit perio
 ## 1. Screenhosts
 
 Simple settings page which makes it quick to get started.
-<p align="center"><img src="./assets/screenshot-1.,png" width="400"><br>
+<p align="center"><img src="./assets/screenshot-1.png" width="400"><br>
 
 ## 2. Frequently Asked Questions
 
