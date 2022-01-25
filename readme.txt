@@ -65,7 +65,7 @@ No. IPv6 is not supported.
 
 = What are the differences between REDIRECT_URL and REQUEST_URI? =
 
-With REQUEST_URL the full GET URL used in the request against your Wordpress site is logged. This would include any parameter passed as part of the URL, .ie, (/index.php?user=123&id=9939).
+With REQUEST_URI the full GET URL used in the request against your Wordpress site is logged. This would include any parameter passed as part of the URL, .ie, (/index.php?user=123&id=9939).
 With REDIRECT_URL only the URL without any parameter is logged, i.e. (/index.php)
 
 = Does data collected with this plugin have any GDPR related concerns? =
