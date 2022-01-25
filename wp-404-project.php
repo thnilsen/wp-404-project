@@ -54,7 +54,7 @@ if ( is_admin() ) {
                        'userid' =>array(
                           'id' => 'user_id',
                           'title' => __( 'User ID', 'wp-404-project' ),
-                          'text'  => __( 'User ID # as found on My Account at https://isc.sans.edu/myaccount.html', WP_404_PROJECT_DOMAIN ),
+                          'text'  => __( 'User ID # as found on My Account at https://isc.sans.edu/myaccount.html', "wp-404-project" ),
                           'type' => 'default',
                           'attributes' => array(
                               'maxlength' => 20,
@@ -65,7 +65,7 @@ if ( is_admin() ) {
                        'apikey' => array(
                           'id' => 'api_key',
                           'title' => __( 'API Key', 'wp-404-project' ),
-                          'text'  => __( 'API Key as listed on My Account at https://isc.sans.edu/myaccount.html', WP_404_PROJECT_DOMAIN ),
+                          'text'  => __( 'API Key as listed on My Account at https://isc.sans.edu/myaccount.html', "wp-404-project" ),
                           'type' => 'default',
                           'attributes' => array(
                               'maxlength' => 60,
@@ -75,8 +75,8 @@ if ( is_admin() ) {
                        ),
                        'sourceuri' => array(
                           'id' => 'sourceuri',
-                          'title' => __( 'Select parameter for source URI to be passed on', WP_404_PROJECT_DOMAIN ),
-                          'text'  => __( 'Privacy note: REQUEST_URI will include the query string. </br>If you do not feel comfortable with this, use REDIRECT_URL', WP_404_PROJECT_DOMAIN ),
+                          'title' => __( 'Select parameter for source URI to be passed on', "wp-404-project" ),
+                          'text'  => __( 'Privacy note: REQUEST_URI will include the query string. </br>If you do not feel comfortable with this, use REDIRECT_URL', "wp-404-project" ),
                           'type'  => 'select',
                           'value' => $options['sourceuri'],
                           'choices' => array(
@@ -86,8 +86,8 @@ if ( is_admin() ) {
                        ),
                        'rate_limit' => array(
                           'id'    => 'rate_limit',
-                          'title' => __( 'Select rate limit for how often a 404 record can be submitted', WP_404_PROJECT_DOMAIN ),
-                          'text'  => __( 'To prevent DoS conditions, this parameter will prevent countinutes 404 records being passed on to SANS ISC', WP_404_PROJECT_DOMAIN ),
+                          'title' => __( 'Select rate limit for how often a 404 record can be submitted', "wp-404-project" ),
+                          'text'  => __( 'To prevent DoS conditions, this parameter will prevent continuous 404 records being passed on to SANS ISC', "wp-404-project" ),
                           'type'  => 'select',
                           'value' => $options['rate_limit'],
 
@@ -101,8 +101,8 @@ if ( is_admin() ) {
                        ),
                        'ip_mask' => array(
                           'id'    => 'ip_mask',
-                          'title' => __( 'IP Mask:', WP_404_PROJECT_DOMAIN ),
-                          'text'  => __( 'Can be set to any level combination such as 0xffffff00 (= /24) or 0xffff0000 (= /16)</br> or 0xff000000 (= /8) or mix it up a little with 0x00ffffff.</br>Defaults to 0xffffffff which will report full IP.', WP_404_PROJECT_DOMAIN ),
+                          'title' => __( 'IP Mask:', "wp-404-project" ),
+                          'text'  => __( 'Can be set to any level combination such as 0xffffff00 (= /24) or 0xffff0000 (= /16)</br> or 0xff000000 (= /8) or mix it up a little with 0x00ffffff.</br>Defaults to 0xffffffff which will report full IP.', "wp-404-project" ),
                           'type'  => 'default',
                           'value' => $options['ip_mask'],
                           'attributes' => array(
@@ -114,15 +114,15 @@ if ( is_admin() ) {
                        ),
                        'use_https' => array(
                           'id'      => 'use_https',
-                          'title'   => __( 'Use HTTPS', WP_404_PROJECT_DOMAIN ),
-                          'text'    => __( 'If left unchecked, HTTP will be used to submit data to SANS ISC', WP_404_PROJECT_DOMAIN ),
+                          'title'   => __( 'Use HTTPS', "wp-404-project" ),
+                          'text'    => __( 'If left unchecked, HTTP will be used to submit data to SANS ISC', "wp-404-project" ),
                           'checked' => $options['use_https'],
                           'type'    => 'checkbox',
                        ),
                        'debug' => array(
                          'id'      => 'debug',
-                         'title'   => __( 'Debug', WP_404_PROJECT_DOMAIN ),
-                         'text'    => __( 'Only leave enabled for testing and debug puproses. WP_DEBUG must be enabled to get logs', WP_404_PROJECT_DOMAIN ),
+                         'title'   => __( 'Debug', "wp-404-project" ),
+                         'text'    => __( 'Only leave enabled for testing and debug puproses. WP_DEBUG must be enabled to get logs', "wp-404-project" ),
                          'checked' => $options['debug'],
                          'type'    => 'checkbox',
                        ),
@@ -190,7 +190,7 @@ function wp_404_project_hook_404(){
 
       if ( ! function_exists('curl_init') ) {
           $bool_config_missing = true;
-          wp_404_project_error_log( __( "Curl PHP module is missing", WP_404_PROJECT_DOMAIN) );
+          wp_404_project_error_log( __( "Curl PHP module is missing", "wp-404-project") );
       }
 
       $str_protocol = 'http';
