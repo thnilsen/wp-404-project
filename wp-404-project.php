@@ -237,9 +237,6 @@ function wp_404_project_hook_404(){
       $s_submit_site = $str_protocol . '://isc.sans.edu/';
       $s_submit_url  = 'weblogs/404project.html?id='. $wp_404_project_options['user_id'].'&version=2';
 
-      $s_submit_site = $str_protocol . '://192.168.1.2/';
-      $s_submit_url= 'weblogs/404project.php?id='.$wp_404_project_options['user_id'].'&version=2';
-
       $s_data = $wp_404_project_options['user_id']. chr(0). $wp_404_project_options['api_key'] . chr(0) . $s_url . chr(0) . $s_ip . chr(0) . $s_ua . chr(0) .date('Y-m-d') . chr(0). date('H:i:s') . chr(0) . $wp_404_project_options['ip_mask'];
 
       $s_post = array( 'timeout'  => 5,
