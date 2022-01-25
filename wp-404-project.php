@@ -26,6 +26,7 @@
  */
 
 define( 'WP_404_PROJECT_VERSION', '1.0.0' );
+define( 'WP_404_PROJECT_DOMAIN', 'wp-404-project');
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -33,8 +34,8 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /* Load dependent classes */
-if ( !class_exists('RationalOptionPages') ) {
-	require_once('includes/RationalOptionPages/RationalOptionPages.php');
+if ( !class_exists( 'RationalOptionPages' ) ) {
+	require_once( 'includes/RationalOptionPages/RationalOptionPages.php' );
 }
 
 if ( is_admin() ) {
@@ -48,34 +49,34 @@ if ( is_admin() ) {
       'parent_slug'   => 'options-general.php',
       'sections'        => array(
           'section-one' => array(
-               'title' => __('WP 404 Project', 'wp-404-project'),
+               'title' => __( 'WP 404 Project', 'wp-404-project' ),
                'fields' => array(
                        'userid' =>array(
                           'id' => 'user_id',
-                          'title' => __('User ID', 'wp-404-project'),
-                          'text'  => __('User ID # as found on My Account at https://isc.sans.edu/myaccount.html'),
+                          'title' => __( 'User ID', 'wp-404-project' ),
+                          'text'  => __( 'User ID # as found on My Account at https://isc.sans.edu/myaccount.html', WP_404_PROJECT_DOMAIN ),
                           'type' => 'default',
                           'attributes' => array(
                               'maxlength' => 20,
-                              'required' => true,
+                              'required'  => true,
                           ),
                           'sanitize'=> true,
                        ),
                        'apikey' => array(
                           'id' => 'api_key',
-                          'title' => __('API Key', 'wp-404-project'),
-                          'text'  => __('API Key as listed on My Account at https://isc.sans.edu/myaccount.html', 'wp-404-project'),
+                          'title' => __( 'API Key', 'wp-404-project' ),
+                          'text'  => __( 'API Key as listed on My Account at https://isc.sans.edu/myaccount.html', WP_404_PROJECT_DOMAIN ),
                           'type' => 'default',
                           'attributes' => array(
                               'maxlength' => 60,
-                              'required' => true,
+                              'required'  => true,
                           ),
                           'sanitize'=> true,
                        ),
                        'sourceuri' => array(
                           'id' => 'sourceuri',
-                          'title' => __('Select parameter for source URI to be passed on', 'wp-404-project'),
-                          'text'  => __('Privacy note: REQUEST_URI will include the query string. </br>If you do not feel comfortable with this, use REDIRECT_URL', 'wp-404-project'),
+                          'title' => __( 'Select parameter for source URI to be passed on', WP_404_PROJECT_DOMAIN ),
+                          'text'  => __( 'Privacy note: REQUEST_URI will include the query string. </br>If you do not feel comfortable with this, use REDIRECT_URL', WP_404_PROJECT_DOMAIN ),
                           'type'  => 'select',
                           'value' => $options['sourceuri'],
                           'choices' => array(
@@ -84,9 +85,9 @@ if ( is_admin() ) {
                           ),
                        ),
                        'rate_limit' => array(
-                          'id' => 'rate_limit',
-                          'title' => __('Select rate limit for how often a 404 record can be submitted', 'wp-404-project'),
-                          'text'  => __('To prevent DoS conditions, this parameter will prevent countinutes 404 records being passed on to SANS ISC', 'wp-404-project'),
+                          'id'    => 'rate_limit',
+                          'title' => __( 'Select rate limit for how often a 404 record can be submitted', WP_404_PROJECT_DOMAIN ),
+                          'text'  => __( 'To prevent DoS conditions, this parameter will prevent countinutes 404 records being passed on to SANS ISC', WP_404_PROJECT_DOMAIN ),
                           'type'  => 'select',
                           'value' => $options['rate_limit'],
 
@@ -99,31 +100,31 @@ if ( is_admin() ) {
                           ),
                        ),
                        'ip_mask' => array(
-                          'id' => 'ip_mask',
-                          'title' => __('IP Mask:', 'wp-404-project'),
-                          'text'  => __('Can be set to any level combination such as 0xffffff00 (= /24) or 0xffff0000 (= /16)</br> or 0xff000000 (= /8) or mix it up a little with 0x00ffffff.</br>Defaults to 0xffffffff which will report full IP.'),
-                          'type' => 'default',
+                          'id'    => 'ip_mask',
+                          'title' => __( 'IP Mask:', WP_404_PROJECT_DOMAIN ),
+                          'text'  => __( 'Can be set to any level combination such as 0xffffff00 (= /24) or 0xffff0000 (= /16)</br> or 0xff000000 (= /8) or mix it up a little with 0x00ffffff.</br>Defaults to 0xffffffff which will report full IP.', WP_404_PROJECT_DOMAIN ),
+                          'type'  => 'default',
                           'value' => $options['ip_mask'],
                           'attributes' => array(
                               'maxlength' => 10,
-                              'required' => false,
-                              'pattern' => '^0x[0fF]{8}$'
+                              'required'  => false,
+                              'pattern'   => '^0x[0fF]{8}$',
                           ),
                           'sanitize'=> true,
                        ),
                        'use_https' => array(
-                          'id' => 'use_https',
-                          'title' => __('Use HTTPS', 'wp-404-project'),
-                          'text'  => __('If left unchecked, HTTP will be used to submit data to SANS ISC', 'wp-404-project'),
+                          'id'      => 'use_https',
+                          'title'   => __( 'Use HTTPS', WP_404_PROJECT_DOMAIN ),
+                          'text'    => __( 'If left unchecked, HTTP will be used to submit data to SANS ISC', WP_404_PROJECT_DOMAIN ),
                           'checked' => $options['use_https'],
-                          'type'  => 'checkbox',
+                          'type'    => 'checkbox',
                        ),
                        'debug' => array(
-                         'id' => 'debug',
-                         'title' => __('Debug', 'wp-404-project'),
-                         'text' => __('Only leave enabled for testing and debug puproses. WP_DEBUG must be enabled to get logs', 'wp-404-project'),
+                         'id'      => 'debug',
+                         'title'   => __( 'Debug', WP_404_PROJECT_DOMAIN ),
+                         'text'    => __( 'Only leave enabled for testing and debug puproses. WP_DEBUG must be enabled to get logs', WP_404_PROJECT_DOMAIN ),
                          'checked' => $options['debug'],
-                         'type' => 'checkbox',
+                         'type'    => 'checkbox',
                        ),
                   ),
               ),
@@ -137,8 +138,8 @@ if ( is_admin() ) {
  *
  * @param array $links
  */
-function wp_404_project_settings_link($links) {
-  $links[] = '<a href="' .admin_url( 'options-general.php?page=wp_404_project_settings' ) . '">' . __('Settings') . '</a>';
+function wp_404_project_settings_link( $links ) {
+  $links[] = '<a href="' .admin_url( 'options-general.php?page=wp_404_project_settings' ) . '">' . __( 'Settings' ) . '</a>';
   return $links;
 }
 
@@ -148,10 +149,10 @@ function wp_404_project_settings_link($links) {
  * @param string $str_error Text to log to errorlog file
  */
 function wp_404_project_error_log($str_error){
-  $options = get_option('wp_404_project_settings', array() );
+  $options = get_option( 'wp_404_project_settings', array() );
 
-  if ( !empty($options['debug']) && $options['debug'] == 'on' ) {
-      error_log($str_error);
+  if ( !empty( $options['debug']) && $options['debug'] == 'on' ) {
+      error_log( WP_404_PROJECT_DOMAIN . " - " . $str_error );
   }
 }
 
@@ -163,33 +164,33 @@ function wp_404_project_hook_404(){
   // Make sure we're in a 404 situation
   if( is_404() ){
 
-      $bool_config_missing = FALSE;
+      $bool_config_missing = false;
       $options = wp_404_project_default_options();
 
       /* Validate options */
-      $arr_value = array('_URI' => 'REQUEST_URI', '_URL'=>'REDIRECT_URL');
-      if (array_key_exists($options['sourceuri'], $arr_value)) {
-          $s_url = $_SERVER[$arr_value[$options['sourceuri']]];
+      $arr_value = array( '_URI' => 'REQUEST_URI', '_URL'=>'REDIRECT_URL' );
+      if ( array_key_exists( $options['sourceuri'], $arr_value ) ) {
+          $s_url = $_SERVER[ $arr_value[ $options['sourceuri'] ] ];
       } else {
           $s_url = $_SERVER['REQUEST_URI'];
       }
 
       /* Make sure options are set */
-      if ( empty($options['user_id']) || empty($options['api_key']) || empty($options['ip_mask']) ) {
+      if ( empty( $options['user_id'] ) || empty( $options['api_key'] ) || empty( $options['ip_mask'] ) ) {
           // TODO - Log missig information
-          $bool_config_missing = TRUE;
+          $bool_config_missing = true;
       }
 
       /* Make sure mask if valid and if not force default */
-      $res = preg_match('/0x[0fF]{8}$/', $options['ip_mask']);
-      if ( $res === FALSE || $res == 0) {
+      $res = preg_match( '/0x[0fF]{8}$/', $options['ip_mask'] );
+      if ( false === $res || $res == 0) {
           $options['ip_mask'] = '0xFFFFFFFF';
-          wp_404_project_error_log("wp-404-project - Mask {$options['ip_mask']} is invalid - using default 0xFFFFFFFF");
+          wp_404_project_error_log( "Mask {$options['ip_mask']} is invalid - using default 0xFFFFFFFF" );
       }
 
       if ( ! function_exists('curl_init') ) {
-          $bool_config_missing = TRUE;
-          wp_404_project_error_log('wp-404-project - Curl PHP module is missing');
+          $bool_config_missing = true;
+          wp_404_project_error_log( __( "Curl PHP module is missing", WP_404_PROJECT_DOMAIN) );
       }
 
       $str_protocol = 'http';
@@ -204,7 +205,7 @@ function wp_404_project_hook_404(){
       }
 
       if ( $bool_config_missing ) {
-          wp_404_project_error_log('wp-404-project - Missing configuration settings - please check settings page');
+          wp_404_project_error_log( __("Missing configuration settings - please check settings page") );
           return;
       }
 
@@ -220,36 +221,36 @@ function wp_404_project_hook_404(){
        */
 
       /* Apply IP Mask */
-      $s_ip = long2ip(ip2long($s_ip) & hexdec($options['ip_mask']));
+      $s_ip = long2ip( ip2long( $s_ip ) & hexdec( $options['ip_mask'] ) );
 
       /* Limit submissions to every 60 seconds to prevent DoS conditions */
-      $run_time = get_option('wp_404_project_lastrun_timestamp');
+      $run_time = get_option( 'wp_404_project_lastrun_timestamp' );
 
-      if ( $run_time != FALSE ) {
+      if ( $run_time != false ) {
         if ( (time() - $run_time)  < $rate_limit ) {
-          wp_404_project_error_log('wp-404-project - Rate limit hit (<'. $rate_limit.' seconds) - try again later.');
+          wp_404_project_error_log( 'Rate limit hit (<'. $rate_limit.' seconds) - try again later.' );
           return;
         }
       }
-      update_option('wp_404_project_lastrun_timestamp', time());
+      update_option( 'wp_404_project_lastrun_timestamp', time() );
 
       $s_submit_site = $str_protocol . '://isc.sans.edu/';
-      $s_submit_url='weblogs/404project.html?id='.$options['user_id'].'&version=2';
+      $s_submit_url  ='weblogs/404project.html?id='.$options['user_id'].'&version=2';
 
-      $s_data=$options['user_id'].chr(0).$options['api_key'].chr(0).$s_url.chr(0).$s_ip.chr(0).$s_ua.chr(0).date('Y-m-d').chr(0).date('H:i:s').chr(0).$options['ip_mask'];
+      $s_data = $options['user_id']. chr(0). $options['api_key'] . chr(0) . $s_url . chr(0) . $s_ip . chr(0) . $s_ua . chr(0) .date('Y-m-d') . chr(0). date('H:i:s') . chr(0) . $options['ip_mask'];
 
-      $s_post = array( 'timeout' => 5,
-                        'blocking' => true,
-                        'headers' => array(),
-                        'body' => array('DATA' => base64_encode($s_data)),
-                      );
+      $s_post = array( 'timeout'  => 5,
+                       'blocking' => true,
+                       'headers'  => array(),
+                       'body'     => array( 'DATA' => base64_encode( $s_data ) ),
+                     );
 
-      if( $s_url != "" ) {
-          $response = wp_remote_post($s_submit_site.$s_submit_url, $s_post);
-          if (is_wp_error($response) ) {
-              wp_404_project_error_log("wp-404-project - Something failed.: " . $response->get_error_message());
+      if( ! empty( $s_url ) ) {
+          $response = wp_remote_post( $s_submit_site.$s_submit_url, $s_post );
+          if ( is_wp_error( $response ) ) {
+              wp_404_project_error_log( "Something failed.: " . $response->get_error_message() );
           } else {
-              wp_404_project_error_log("wp-404-project - Submission sent to $s_submit_site$s_submit_url");
+              wp_404_project_error_log( "Submission sent to $s_submit_site$s_submit_url" );
           }
       }
   }
@@ -269,11 +270,13 @@ function wp_404_project_default_options(){
     'use_https'  => true,
     'debug'      => false,
   );
-  return get_option('wp_404_project_settings', $defaults);
+  return get_option( 'wp_404_project_settings', $defaults );
 
 }
 
-add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'wp_404_project_settings_link');
-add_action('template_redirect', 'wp_404_project_hook_404');
+add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'wp_404_project_settings_link' );
+add_action( 'template_redirect', 'wp_404_project_hook_404' );
 
-if (is_admin() ){ $option_page = new RationalOptionPages($pages); }
+if ( is_admin() ) {
+  $option_page = new RationalOptionPages( $pages );
+}
