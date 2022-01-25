@@ -276,19 +276,9 @@ function wp_404_project_default_options(){
   return get_option( 'wp_404_project_settings', $defaults );
 
 }
-/*
- * Uninstall routine for Plugin
- */
-function wp_404_project_uninstall(){
-  if (! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-      die;
-  }
-  // TODO: Add option to remove data when uninstalling
-}
 
 add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'wp_404_project_settings_link' );
 add_action( 'template_redirect', 'wp_404_project_hook_404' );
-register_uninstall_hook( __FILE__, 'wp_404_project_uninstall' );
 
 if ( is_admin() ) {
   $wp_404_project_option_page = new RationalOptionPages( $wp_404_project_pages );
