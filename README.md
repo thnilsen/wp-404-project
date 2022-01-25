@@ -12,6 +12,10 @@ The code will rate limit submissions. Any 404 requests during a rate limit perio
 
 The code is based on SANS original PHP code for the 404Project.
 
+## Disclaimer
+
+This is a personal project and was developed without any encouragement from SANS ISC. The plugin is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+
 ## 1. Screenhosts
 
 Simple settings page which makes it quick to get started.
@@ -23,42 +27,46 @@ Simple settings page which makes it quick to get started.
 
 Yes. There is no cost associated with using this plugin.
 
-### 2.2 Where can I get a User ID and API Key
+## 2.2 Is this developed by SANS ISC
+
+No, this plugin has been developed without any input from SANS ISC and is wholly a personal project of the developer. SANS ISC original PHP script was used as a starting point for this plugin, although not much remains of the original code.
+
+### 2.3 Where can I get a User ID and API Key
 
 In order to use this plugin you will need to have an account on isc.sans.org, or sign up for one. These are free and anyone can get one. Go to https://isc.sans.edu/login.html if you already have an account with them, or if not register using https://isc.sans.edu/register.html.
 Once you have logged on, go to My Account (https://isc.sans.edu/myaccount.html) and copy the User ID and API Key to the settings screen of this plugin.
 
-### 2.3 Nothing seems to be happening
+### 2.4 Nothing seems to be happening
 
 This plugin will not modify the content or make any visible output on your Wordpress site. It only adds a filter to the internal Wordpress 404 error handling code.
 
-### 2.4 How can I view my submissions
+### 2.5 How can I view my submissions
 
 Log on to My Account at SANS and go to the My 404 Reports dashboard. This will list out details of date,time,URL,user agent and source IP. Please note that it might take some time to show new records as SANS only parses the logs twice per hour.
 
-### 2.5 What is the rate limit good for
+### 2.6 What is the rate limit good for
 
 Rate limit is a setting to prevent the servers of SANS ISC to be overloaded with log requests from this plugin. It will make sure that one cannot submit more than one 404 report per x seconds, where X can be chosen of 10, 30 og 60 seconds. Without the limit setting your server could be pushing too many requests onto SANS servers if your server was overloaded with 404 requests that you then forward on to SANS ISC.
 
-### 2.6 What is the IP Mask setting
+### 2.7 What is the IP Mask setting
 
 In order to mask/hide part of the reported IP address of which host generated a 404 page not found error, one can apply a mask to change bits of the IP address. The principle is very easy. An IPv4 address consists of 4 octets x.x.x.x. If you want hide one of the 4 octets to provide some privacy to the host you can change that particular mask bit to 0 rather than F. The string must always start with 0x and can only contain 0 or F/f.
 To remove the last octet from and IP use 0xFFFFFF00. This would turn 192.168.100.102 into 192.168.100.0. A mask of 0xFFFF0000 will return 192.168.0.0 for the same IP.
 
-### 2.7 Does it support IPv6
+### 2.8 Does it support IPv6
 
 No. IPv6 is not supported.
 
-### 2.8 What are the differences between REDIRECT_URL and REQUEST_URI
+### 2.9 What are the differences between REDIRECT_URL and REQUEST_URI
 
 With REQUEST_URL the full GET URL used in the request against your Wordpress site is logged. This would include any parameter passed as part of the URL, .ie, (/index.php?user=123&id=9939).
 With REDIRECT_URL only the URL without any parameter is logged, i.e. (/index.php)
 
-### 2.9 Does data collected with this plugin have any GDRP related concerns?
+### 2.10 Does data collected with this plugin have any GDRP related concerns
 
 Yes. IP addresses are considered PII (Personal Identifiable Information) and as such fall in under GDPR. Use the IP Mask setting of 0xFFFFFF00 to hide the actual IP of your 404 visitors to be GDPR compliant.
 
-### 2.10 How do I troubleshoot issues
+### 2.11 How do I troubleshoot issues
 
 If you run into any problems with using this plugin, enable WP_DEBUG in your sites wp-config.php file. This should produce a php_error.log file in the root folder of your Wordpress site. Next, turn on the Debug option of this plugin and generate a 404 request by accessing your site with a non existing URL. This should normally then generate some information in the php_error.log file to give you an idea of what's going on.
 Things to consider are:

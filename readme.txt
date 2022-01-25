@@ -19,6 +19,10 @@ The code will rate limit submissions. Any 404 requests during a rate limit perio
 
 The code is based on SANS original PHP code for the 404Project.
 
+== Disclaimer ==
+
+This is a personal project and was developed without any encouragement from SANS ISC. The plugin is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+
 == Screenhosts ==
 
 1. Simple settings page which makes it quick to get started.
@@ -28,6 +32,10 @@ The code is based on SANS original PHP code for the 404Project.
 = Is WP 404 Project Free? ==
 
 Yes. There is no cost associated with using this plugin.
+
+== Is this developed by SANS ISC? ==
+
+No, this plugin has been developed without any input from SANS ISC and is wholly a personal project of the developer. SANS ISC original PHP script was used as a starting point for this plugin, although not much remains of the original code.
 
 = Where can I get a User ID and API Key? =
 

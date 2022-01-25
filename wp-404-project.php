@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       WP 404 Project
  * Plugin URI:        https://github.com/thnilsen/wp-404-project/
- * Description:       SANS ISC 404 Project as a wordpress plugin. Code based on original PHP script by SANS ISC
+ * Description:       SANS ISC 404 Project as a wordpress plugin. Forwards 404 Page Not Found URL/URI data to SANS ISC Weblog collector to discover web application attack trends.
  * Version:           1.0.0
  * Author:            Thomas Nilsen
  * Author URI:        https://crossley-nilsen.com
