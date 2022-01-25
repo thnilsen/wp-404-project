@@ -1,5 +1,5 @@
 # wp-404-project
-Wordpress Plugin for the SANS 404Project
+Wordpress Plugin for the SANS ISC 404Project
 
 The 404Project collects \"Page Not Found\" errors from web servers and submits data to SANS ISC for their weblog collector to discover web application attack trends.
 
@@ -49,17 +49,22 @@ To remove the last octet from and IP use 0xFFFFFF00. This would turn 192.168.100
 
 No. IPv6 is not supported.
 
-### 2.8 Does data collected with this plugin have any GDRP related concerns?
+### 2.8 What are the differences between REDIRECT_URL and REQUEST_URI
+
+With REQUEST_URL the full GET URL used in the request against your Wordpress site is logged. This would include any parameter passed as part of the URL, .ie, (/index.php?user=123&id=9939).
+With REDIRECT_URL only the URL without any parameter is logged, i.e. (/index.php)
+
+### 2.9 Does data collected with this plugin have any GDRP related concerns?
 
 Yes. IP addresses are considered PII (Personal Identifiable Information) and as such fall in under GDPR. Use the IP Mask setting of 0xFFFFFF00 to hide the actual IP of your 404 visitors to be GDPR compliant.
 
-### 2.9 How do I troubleshoot issues
+### 2.10 How do I troubleshoot issues
 
 If you run into any problems with using this plugin, enable WP_DEBUG in your sites wp-config.php file. This should produce a php_error.log file in the root folder of your Wordpress site. Next, turn on the Debug option of this plugin and generate a 404 request by accessing your site with a non existing URL. This should normally then generate some information in the php_error.log file to give you an idea of what's going on.
 Things to consider are:
-  - Make sure is that the cURL library for PHP is installed on your server.
   - Make sure PHP is allowed to do outbound connections
   - Make sure your firewall allows your PHP server to submit HTTP or HTTPS requests to isc.sans.edu
+  - Make sure is that the cURL library for PHP is installed on your server. (Not always needed as Wordpress has a builtin web request api!)
 
 ## 3 Changelog
 
