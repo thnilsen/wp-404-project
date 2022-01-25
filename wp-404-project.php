@@ -234,25 +234,23 @@ function wp_404_project_hook_404(){
       update_option('wp_404_project_lastrun_timestamp', time());
 
       $s_submit_site = $str_protocol . '://isc.sans.edu/';
-      
       $s_submit_url='weblogs/404project.html?id='.$options['user_id'].'&version=2';
 
       $s_data=$options['user_id'].chr(0).$options['api_key'].chr(0).$s_url.chr(0).$s_ip.chr(0).$s_ua.chr(0).date('Y-m-d').chr(0).date('H:i:s').chr(0).$options['ip_mask'];
-      $s_data='DATA='.base64_encode($s_data);
 
-      if( $s_url != "" ){
+      $s_post = array( 'timeout' => 5,
+                        'blocking' => true,
+                        'headers' => array(),
+                        'body' => array('DATA' => base64_encode($s_data)),
+                      );
 
-          $ch = curl_init($s_submit_site.$s_submit_url);
-          curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-          curl_setopt($ch,CURLOPT_POST,1);
-          curl_setopt($ch,CURLOPT_POSTFIELDS,$s_data);
-          $output = curl_exec($ch);
-          if ( curl_errno($ch)!=0 ) {
-              wp_404_project_error_log("wp-404-project - CURL Error ".curl_errno($ch)." ".curl_error($ch));
+      if( $s_url != "" ) {
+          $response = wp_remote_post($s_submit_site.$s_submit_url, $s_post);
+          if (is_wp_error($response) ) {
+              wp_404_project_error_log("wp-404-project - Something failed.: " . $response->get_error_message());
           } else {
               wp_404_project_error_log("wp-404-project - Submission sent to $s_submit_site$s_submit_url");
           }
-          curl_close($ch);
       }
   }
 }
