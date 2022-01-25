@@ -40,9 +40,9 @@ if ( !class_exists( 'RationalOptionPages' ) ) {
 
 if ( is_admin() ) {
 
-  $options = wp_404_project_default_options();
+  $wp_404_project_options = wp_404_project_default_options();
 
-  $pages = array(
+  $wp_404_project_pages = array(
   	'wp_404_project_settings'	=> array(
   		'page_title'	=> __( 'WP 404 Project Settings', 'wp-404-project' ),
       'menu_slug' => 'wp_404_project_settings',
@@ -78,7 +78,7 @@ if ( is_admin() ) {
                           'title' => __( 'Select parameter for source URI to be passed on', "wp-404-project" ),
                           'text'  => __( 'Privacy note: REQUEST_URI will include the query string. </br>If you do not feel comfortable with this, use REDIRECT_URL', "wp-404-project" ),
                           'type'  => 'select',
-                          'value' => $options['sourceuri'],
+                          'value' => $wp_404_project_options['sourceuri'],
                           'choices' => array(
                               '_URI' => 'REQUEST_URI',
                               '_URL' => 'REDIRECT_URL',
@@ -89,7 +89,7 @@ if ( is_admin() ) {
                           'title' => __( 'Select rate limit for how often a 404 record can be submitted', "wp-404-project" ),
                           'text'  => __( 'To prevent DoS conditions, this parameter will prevent continuous 404 records being passed on to SANS ISC', "wp-404-project" ),
                           'type'  => 'select',
-                          'value' => $options['rate_limit'],
+                          'value' => $wp_404_project_options['rate_limit'],
 
                           'choices' => array(
                               '_60' => 'Once every 60 seconds',
@@ -104,7 +104,7 @@ if ( is_admin() ) {
                           'title' => __( 'IP Mask:', "wp-404-project" ),
                           'text'  => __( 'Can be set to any level combination such as 0xffffff00 (= /24) or 0xffff0000 (= /16)</br> or 0xff000000 (= /8) or mix it up a little with 0x00ffffff.</br>Defaults to 0xffffffff which will report full IP.', "wp-404-project" ),
                           'type'  => 'default',
-                          'value' => $options['ip_mask'],
+                          'value' => $wp_404_project_options['ip_mask'],
                           'attributes' => array(
                               'maxlength' => 10,
                               'required'  => false,
@@ -116,14 +116,14 @@ if ( is_admin() ) {
                           'id'      => 'use_https',
                           'title'   => __( 'Use HTTPS', "wp-404-project" ),
                           'text'    => __( 'If left unchecked, HTTP will be used to submit data to SANS ISC', "wp-404-project" ),
-                          'checked' => $options['use_https'],
+                          'checked' => $wp_404_project_options['use_https'],
                           'type'    => 'checkbox',
                        ),
                        'debug' => array(
                          'id'      => 'debug',
                          'title'   => __( 'Debug', "wp-404-project" ),
                          'text'    => __( 'Only leave enabled for testing and debug puproses. WP_DEBUG must be enabled to get logs', "wp-404-project" ),
-                         'checked' => $options['debug'],
+                         'checked' => $wp_404_project_options['debug'],
                          'type'    => 'checkbox',
                        ),
                   ),
@@ -149,9 +149,9 @@ function wp_404_project_settings_link( $links ) {
  * @param string $str_error Text to log to errorlog file
  */
 function wp_404_project_error_log($str_error){
-  $options = get_option( 'wp_404_project_settings', array() );
+  $wp_404_project_options = get_option( 'wp_404_project_settings', array() );
 
-  if ( !empty( $options['debug']) && $options['debug'] == 'on' ) {
+  if ( !empty( $wp_404_project_options['debug']) && $wp_404_project_options['debug'] == 'on' ) {
       error_log( WP_404_PROJECT_DOMAIN . " - " . $str_error );
   }
 }
@@ -165,27 +165,27 @@ function wp_404_project_hook_404(){
   if( is_404() ){
 
       $bool_config_missing = false;
-      $options = wp_404_project_default_options();
+      $wp_404_project_options = wp_404_project_default_options();
 
       /* Validate options */
       $arr_value = array( '_URI' => 'REQUEST_URI', '_URL'=>'REDIRECT_URL' );
-      if ( array_key_exists( $options['sourceuri'], $arr_value ) ) {
-          $s_url = $_SERVER[ $arr_value[ $options['sourceuri'] ] ];
+      if ( array_key_exists( $wp_404_project_options['sourceuri'], $arr_value ) ) {
+          $s_url = $_SERVER[ $arr_value[ $wp_404_project_options['sourceuri'] ] ];
       } else {
           $s_url = $_SERVER['REQUEST_URI'];
       }
 
       /* Make sure options are set */
-      if ( empty( $options['user_id'] ) || empty( $options['api_key'] ) || empty( $options['ip_mask'] ) ) {
+      if ( empty( $wp_404_project_options['user_id'] ) || empty( $wp_404_project_options['api_key'] ) || empty( $wp_404_project_options['ip_mask'] ) ) {
           // TODO - Log missig information
           $bool_config_missing = true;
       }
 
       /* Make sure mask if valid and if not force default */
-      $res = preg_match( '/0x[0fF]{8}$/', $options['ip_mask'] );
+      $res = preg_match( '/0x[0fF]{8}$/', $wp_404_project_options['ip_mask'] );
       if ( false === $res || $res == 0) {
-          $options['ip_mask'] = '0xFFFFFFFF';
-          wp_404_project_error_log( "Mask {$options['ip_mask']} is invalid - using default 0xFFFFFFFF" );
+          $wp_404_project_options['ip_mask'] = '0xFFFFFFFF';
+          wp_404_project_error_log( "Mask {$wp_404_project_options['ip_mask']} is invalid - using default 0xFFFFFFFF" );
       }
 
       if ( ! function_exists('curl_init') ) {
@@ -194,12 +194,12 @@ function wp_404_project_hook_404(){
       }
 
       $str_protocol = 'http';
-      if ( $options['use_https'] == 'on' ) {
+      if ( $wp_404_project_options['use_https'] == 'on' ) {
           $str_protocol = 'https';
       }
 
       /* Make sure rate limit is not below 10 seconds */
-      $rate_limit = (int) str_replace('_', '', $options['rate_limit']);
+      $rate_limit = (int) str_replace('_', '', $wp_404_project_options['rate_limit']);
       if ( $rate_limit < 10 ) {
         $rate_limit = 10;
       }
@@ -221,7 +221,7 @@ function wp_404_project_hook_404(){
        */
 
       /* Apply IP Mask */
-      $s_ip = long2ip( ip2long( $s_ip ) & hexdec( $options['ip_mask'] ) );
+      $s_ip = long2ip( ip2long( $s_ip ) & hexdec( $wp_404_project_options['ip_mask'] ) );
 
       /* Limit submissions to every 60 seconds to prevent DoS conditions */
       $run_time = get_option( 'wp_404_project_lastrun_timestamp' );
@@ -235,9 +235,12 @@ function wp_404_project_hook_404(){
       update_option( 'wp_404_project_lastrun_timestamp', time() );
 
       $s_submit_site = $str_protocol . '://isc.sans.edu/';
-      $s_submit_url  ='weblogs/404project.html?id='.$options['user_id'].'&version=2';
+      $s_submit_url  = 'weblogs/404project.html?id='. $wp_404_project_options['user_id'].'&version=2';
 
-      $s_data = $options['user_id']. chr(0). $options['api_key'] . chr(0) . $s_url . chr(0) . $s_ip . chr(0) . $s_ua . chr(0) .date('Y-m-d') . chr(0). date('H:i:s') . chr(0) . $options['ip_mask'];
+      $s_submit_site = $str_protocol . '://192.168.1.2/';
+      $s_submit_url= 'weblogs/404project.php?id='.$wp_404_project_options['user_id'].'&version=2';
+
+      $s_data = $wp_404_project_options['user_id']. chr(0). $wp_404_project_options['api_key'] . chr(0) . $s_url . chr(0) . $s_ip . chr(0) . $s_ua . chr(0) .date('Y-m-d') . chr(0). date('H:i:s') . chr(0) . $wp_404_project_options['ip_mask'];
 
       $s_post = array( 'timeout'  => 5,
                        'blocking' => true,
@@ -278,5 +281,5 @@ add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'wp_404_project_
 add_action( 'template_redirect', 'wp_404_project_hook_404' );
 
 if ( is_admin() ) {
-  $option_page = new RationalOptionPages( $pages );
+  $wp_404_project_option_page = new RationalOptionPages( $wp_404_project_pages );
 }
