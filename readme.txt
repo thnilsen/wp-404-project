@@ -17,6 +17,8 @@ The SANS ISC 404Project collects information from web requests that ends up on a
 The information is collected by The Internet Storm Center (SANS ISC) at http://isc.sans.org
 The code will rate limit submissions. Any 404 requests during a rate limit period will be ignored. This is to prevent overloading / DoS conditions.
 
+The code is based on SANS original PHP code for the 404Project.
+
 == Screenhosts ==
 
 1. Simple settings page which makes it quick to get started.
@@ -60,7 +62,10 @@ Yes. IP addresses are considered PII (Personal Identifiable Information) and as 
 = How do I troubleshoot issues? =
 
 If you run into any problems with using this plugin, enable WP_DEBUG in your sites wp-config.php file. This should produce a php_error.log file in the root folder of your Wordpress site. Next, turn on the Debug option of this plugin and generate a 404 request by accessing your site with a non existing URL. This should normally then generate some information in the php_error.log file to give you an idea of what's going on.
-One thing to make sure is that the cURL library for PHP is installed on your server.
+Things to consider are:
+- Make sure is that the cURL library for PHP is installed on your server.
+- Make sure PHP is allowed to do outbound connections
+- Make sure your firewall allows your PHP server to submit HTTP or HTTPS requests to isc.sans.edu
 
 == Changelog ==
 
