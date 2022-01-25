@@ -29,7 +29,7 @@ define( 'WP_404_PROJECT_VERSION', '1.0.0' );
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
-        die;
+  die;
 }
 
 /* Load dependent classes */
@@ -138,8 +138,8 @@ if ( is_admin() ) {
  * @param array $links
  */
 function wp_404_project_settings_link($links) {
-    $links[] = '<a href="' .admin_url( 'options-general.php?page=wp_404_project_settings' ) . '">' . __('Settings') . '</a>';
-    return $links;
+  $links[] = '<a href="' .admin_url( 'options-general.php?page=wp_404_project_settings' ) . '">' . __('Settings') . '</a>';
+  return $links;
 }
 
 /*
@@ -148,11 +148,11 @@ function wp_404_project_settings_link($links) {
  * @param string $str_error Text to log to errorlog file
  */
 function wp_404_project_error_log($str_error){
-    $options = get_option('wp_404_project_settings', array() );
+  $options = get_option('wp_404_project_settings', array() );
 
-    if ( !empty($options['debug']) && $options['debug'] == 'on' ) {
-        error_log($str_error);
-    }
+  if ( !empty($options['debug']) && $options['debug'] == 'on' ) {
+      error_log($str_error);
+  }
 }
 
 /*
@@ -160,101 +160,101 @@ function wp_404_project_error_log($str_error){
  */
 function wp_404_project_hook_404(){
 
-    // Make sure we're in a 404 situation
-    if( is_404() ){
+  // Make sure we're in a 404 situation
+  if( is_404() ){
 
-        $bool_config_missing = FALSE;
-        $options = wp_404_project_default_options();
+      $bool_config_missing = FALSE;
+      $options = wp_404_project_default_options();
 
-        /* Validate options */
-        $arr_value = array('_URI' => 'REQUEST_URI', '_URL'=>'REDIRECT_URL');
-        if (array_key_exists($options['sourceuri'], $arr_value)) {
-            $s_url = $_SERVER[$arr_value[$options['sourceuri']]];
-        } else {
-            $s_url = $_SERVER['REQUEST_URI'];
+      /* Validate options */
+      $arr_value = array('_URI' => 'REQUEST_URI', '_URL'=>'REDIRECT_URL');
+      if (array_key_exists($options['sourceuri'], $arr_value)) {
+          $s_url = $_SERVER[$arr_value[$options['sourceuri']]];
+      } else {
+          $s_url = $_SERVER['REQUEST_URI'];
+      }
+
+      /* Make sure options are set */
+      if ( empty($options['user_id']) || empty($options['api_key']) || empty($options['ip_mask']) ) {
+          // TODO - Log missig information
+          $bool_config_missing = TRUE;
+      }
+
+      /* Make sure mask if valid and if not force default */
+      $res = preg_match('/0x[0fF]{8}$/', $options['ip_mask']);
+      if ( $res === FALSE || $res == 0) {
+          $options['ip_mask'] = '0xFFFFFFFF';
+          wp_404_project_error_log("wp-404-project - Mask {$options['ip_mask']} is invalid - using default 0xFFFFFFFF");
+      }
+
+      if ( ! function_exists('curl_init') ) {
+          $bool_config_missing = TRUE;
+          wp_404_project_error_log('wp-404-project - Curl PHP module is missing');
+      }
+
+      $str_protocol = 'http';
+      if ( $options['use_https'] == 'on' ) {
+          $str_protocol = 'https';
+      }
+
+      /* Make sure rate limit is not below 10 seconds */
+      $rate_limit = (int) str_replace('_', '', $options['rate_limit']);
+      if ( $rate_limit < 10 ) {
+        $rate_limit = 10;
+      }
+
+      if ( $bool_config_missing ) {
+          wp_404_project_error_log('wp-404-project - Missing configuration settings - please check settings page');
+          return;
+      }
+
+      $s_ip = $_SERVER['REMOTE_ADDR'];
+      $s_ua = $_SERVER['HTTP_USER_AGENT'];
+
+
+      /* Set IP Mask
+       *   Default = 0xffffffff (=/32)
+       *   Can be set to any level combination
+       *    such as 0xffffff00/24 or 0xffff0000 (=/16) or 0xff000000 (=/8)
+       *    or mix it up a little with 0x00ffffff
+       */
+
+      /* Apply IP Mask */
+      $s_ip = long2ip(ip2long($s_ip) & hexdec($options['ip_mask']));
+
+      /* Limit submissions to every 60 seconds to prevent DoS conditions */
+      $run_time = get_option('wp_404_project_lastrun_timestamp');
+
+      if ( $run_time != FALSE ) {
+        if ( (time() - $run_time)  < $rate_limit ) {
+          wp_404_project_error_log('wp-404-project - Rate limit hit (<'. $rate_limit.' seconds) - try again later.');
+          return;
         }
+      }
+      update_option('wp_404_project_lastrun_timestamp', time());
 
-        /* Make sure options are set */
-        if ( empty($options['user_id']) || empty($options['api_key']) || empty($options['ip_mask']) ) {
-            // TODO - Log missig information
-            $bool_config_missing = TRUE;
-        }
+      $s_submit_site = $str_protocol . '://isc.sans.edu/';
+      
+      $s_submit_url='weblogs/404project.html?id='.$options['user_id'].'&version=2';
 
-        /* Make sure mask if valid and if not force default */
-        $res = preg_match('/0x[0fF]{8}$/', $options['ip_mask']);
-        if ( $res === FALSE || $res == 0) {
-            $options['ip_mask'] = '0xFFFFFFFF';
-            wp_404_project_error_log("wp-404-project - Mask {$options['ip_mask']} is invalid - using default 0xFFFFFFFF");
-        }
+      $s_data=$options['user_id'].chr(0).$options['api_key'].chr(0).$s_url.chr(0).$s_ip.chr(0).$s_ua.chr(0).date('Y-m-d').chr(0).date('H:i:s').chr(0).$options['ip_mask'];
+      $s_data='DATA='.base64_encode($s_data);
 
-        if ( ! function_exists('curl_init') ) {
-            $bool_config_missing = TRUE;
-            wp_404_project_error_log('wp-404-project - Curl PHP module is missing');
-        }
+      if( $s_url != "" ){
 
-        $str_protocol = 'http';
-        if ( $options['use_https'] == 'on' ) {
-            $str_protocol = 'https';
-        }
-
-        /* Make sure rate limit is not below 10 seconds */
-        $rate_limit = (int) str_replace('_', '', $options['rate_limit']);
-        if ( $rate_limit < 10 ) {
-          $rate_limit = 10;
-        }
-
-        if ( $bool_config_missing ) {
-            wp_404_project_error_log('wp-404-project - Missing configuration settings - please check settings page');
-            return;
-        }
-
-        $s_ip = $_SERVER['REMOTE_ADDR'];
-        $s_ua = $_SERVER['HTTP_USER_AGENT'];
-
-
-        /* Set IP Mask
-         *   Default = 0xffffffff (=/32)
-         *   Can be set to any level combination
-         *    such as 0xffffff00/24 or 0xffff0000 (=/16) or 0xff000000 (=/8)
-         *    or mix it up a little with 0x00ffffff
-         */
-
-        /* Apply IP Mask */
-        $s_ip = long2ip(ip2long($s_ip) & hexdec($options['ip_mask']));
-
-        /* Limit submissions to every 60 seconds to prevent DoS conditions */
-        $run_time = get_option('wp_404_project_lastrun_timestamp');
-
-        if ( $run_time != FALSE ) {
-          if ( (time() - $run_time)  < $rate_limit ) {
-            wp_404_project_error_log('wp-404-project - Rate limit hit (<'. $rate_limit.' seconds) - try again later.');
-            return;
+          $ch = curl_init($s_submit_site.$s_submit_url);
+          curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+          curl_setopt($ch,CURLOPT_POST,1);
+          curl_setopt($ch,CURLOPT_POSTFIELDS,$s_data);
+          $output = curl_exec($ch);
+          if ( curl_errno($ch)!=0 ) {
+              wp_404_project_error_log("wp-404-project - CURL Error ".curl_errno($ch)." ".curl_error($ch));
+          } else {
+              wp_404_project_error_log("wp-404-project - Submission sent to $s_submit_site$s_submit_url");
           }
-        }
-        update_option('wp_404_project_lastrun_timestamp', time());
-
-        $s_submit_site = $str_protocol . '://isc.sans.edu/';
-
-        $s_submit_url='weblogs/404project.html?id='.$options['user_id'].'&version=2';
-
-        $s_data=$options['user_id'].chr(0).$options['api_key'].chr(0).$s_url.chr(0).$s_ip.chr(0).$s_ua.chr(0).date('Y-m-d').chr(0).date('H:i:s').chr(0).$options['ip_mask'];
-        $s_data='DATA='.base64_encode($s_data);
-
-        if( $s_url != "" ){
-
-            $ch = curl_init($s_submit_site.$s_submit_url);
-            curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-            curl_setopt($ch,CURLOPT_POST,1);
-            curl_setopt($ch,CURLOPT_POSTFIELDS,$s_data);
-            $output = curl_exec($ch);
-            if ( curl_errno($ch)!=0 ) {
-                wp_404_project_error_log("wp-404-project - CURL Error ".curl_errno($ch)." ".curl_error($ch));
-            } else {
-                wp_404_project_error_log("wp-404-project - Submission sent to $s_submit_site$s_submit_url");
-            }
-            curl_close($ch);
-        }
-    }
+          curl_close($ch);
+      }
+  }
 }
 
 /*
