@@ -2,7 +2,7 @@
 Contributors: thnilsen
 Tags: 404, 404project,SANS,ISC,Internet Storm center
 Requires at least: 5.0
-Tested up to: 5.8
+Tested up to: 5.9
 Stable tag: 1.0.0
 Requires PHP: 5.6
 License: GPL2
