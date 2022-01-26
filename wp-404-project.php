@@ -45,17 +45,17 @@ if ( is_admin() ) {
   $wp_404_project_pages = array(
   	'wp_404_project_settings'	=> array(
   		'page_title'	=> __( 'WP 404 Project Settings', 'wp-404-project' ),
-      'menu_slug' => 'wp_404_project_settings',
-      'parent_slug'   => 'options-general.php',
+      'menu_slug'   => 'wp_404_project_settings',
+      'parent_slug' => 'options-general.php',
       'sections'        => array(
           'section-one' => array(
-               'title' => __( 'WP 404 Project', 'wp-404-project' ),
+               'title'  => __( 'WP 404 Project', 'wp-404-project' ),
                'fields' => array(
                        'userid' =>array(
-                          'id' => 'user_id',
+                          'id'    => 'user_id',
                           'title' => __( 'User ID', 'wp-404-project' ),
                           'text'  => __( 'User ID # as found on My Account at https://isc.sans.edu/myaccount.html', "wp-404-project" ),
-                          'type' => 'default',
+                          'type'  => 'default',
                           'attributes' => array(
                               'maxlength' => 20,
                               'required'  => true,
@@ -63,10 +63,10 @@ if ( is_admin() ) {
                           'sanitize'=> true,
                        ),
                        'apikey' => array(
-                          'id' => 'api_key',
+                          'id'    => 'api_key',
                           'title' => __( 'API Key', 'wp-404-project' ),
                           'text'  => __( 'API Key as listed on My Account at https://isc.sans.edu/myaccount.html', "wp-404-project" ),
-                          'type' => 'default',
+                          'type'  => 'default',
                           'attributes' => array(
                               'maxlength' => 60,
                               'required'  => true,
@@ -74,7 +74,7 @@ if ( is_admin() ) {
                           'sanitize'=> true,
                        ),
                        'sourceuri' => array(
-                          'id' => 'sourceuri',
+                          'id'    => 'sourceuri',
                           'title' => __( 'Select parameter for source URI to be passed on', "wp-404-project" ),
                           'text'  => __( 'Privacy note: REQUEST_URI will include the query string. </br>If you do not feel comfortable with this, use REDIRECT_URL', "wp-404-project" ),
                           'type'  => 'select',
@@ -112,7 +112,7 @@ if ( is_admin() ) {
                           ),
                           'sanitize'=> true,
                        ),
-                       'use_https' => array(
+                       'use_https'  => array(
                           'id'      => 'use_https',
                           'title'   => __( 'Use HTTPS', "wp-404-project" ),
                           'text'    => __( 'If left unchecked, HTTP will be used to submit data to SANS ISC', "wp-404-project" ),
@@ -127,6 +127,9 @@ if ( is_admin() ) {
                          'type'    => 'checkbox',
                        ),
                   ),
+              ),
+              'section-two' => array(
+                 'title' => __("Submitted 404 reports: " .get_option( 'wp_404_project_counter_submitted' ) ),
               ),
           ),
       ),
@@ -250,7 +253,9 @@ function wp_404_project_hook_404(){
           if ( is_wp_error( $response ) ) {
               wp_404_project_error_log( "Something failed.: " . $response->get_error_message() );
           } else {
+              $wp_404_project_counter_submitted = (int) get_option( 'wp_404_project_counter_submitted' );
               wp_404_project_error_log( "Submission sent to $s_submit_site$s_submit_url" );
+              update_option( 'wp_404_project_counter_submitted', ++$wp_404_project_counter_submitted  );
           }
       }
   }
